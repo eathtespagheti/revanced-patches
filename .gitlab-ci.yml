@@ -30,16 +30,9 @@ release:
     - echo "Version: $VERSION"
     - RELEASE_NAME="ReVanced Patches ${VERSION}"
     - RELEASE_NOTES="Release ${VERSION}"
-    - |
-      curl -s -X POST -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-      -H "Content-Type: application/json" \
-      -d '{"name":"'"${RELEASE_NAME}"'","tag_name":"'"${VERSION}"'","description":"'"${RELEASE_NOTES}"'"}' \
-      "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/releases"
+    - curl -s -X POST -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -H "Content-Type: application/json" -d "{\"name\":\"${RELEASE_NAME}\",\"tag_name\":\"${VERSION}\",\"description\":\"${RELEASE_NOTES}\"}" "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/releases"
     - RVP_FILE=$(ls patches/build/libs/patches-*.rvp)
     - echo "Uploading $RVP_FILE..."
-    - curl -s -X POST -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-      -F "file=@${RVP_FILE}" \
-      -F "name=patches.rvp" \
-      "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/releases/${VERSION}/assets/links"
+    - curl -s -X POST -H "PRIVATE-TOKEN: ${GITLAB_TOKEN}" -F "file=@${RVP_FILE}" -F "name=patches.rvp" "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/releases/${VERSION}/assets/links"
   rules:
     - if: $CI_COMMIT_TAG
